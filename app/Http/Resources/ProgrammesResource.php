@@ -15,15 +15,6 @@ class ProgrammesResource extends JsonResource
      */
     public function toArray($request)
     {
-        $schedulesAll = Schedules::all();
-        $schedules=[];
-        foreach($schedulesAll  as $s){
-            if($s->programme_id == $this->id){
-                $schedules[] = $s;
-            }
-        }
-        $this->schedules = $schedules;
-        $this->save();
         return [
             'id'=>$this->id,
             'title'=>$this->title,

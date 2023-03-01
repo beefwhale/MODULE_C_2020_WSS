@@ -24,16 +24,12 @@ class SearchController extends Controller
 
         //assigning schedules to programmes
         $schedulesAll = Schedules::all();
-        $programmes = ProgrammesResource::collection(Programmes::all());
+        $programmes = Programmes::all();
         // Filter based on search
         $validProgrammes = [];
-        return response($programmes[0]['schedules'][0]);
         foreach($programmes as $p){
             $validSchedules = [];
             $schedules = $p['schedules'];
-            foreach($p as $smallp){
-                return response($smallp);
-            }
             if ($schedules != []){
                 foreach ($schedules as $s){
                     if($s->start_date_time <= $startInput && $s-> end_date_time >= $endInput){
