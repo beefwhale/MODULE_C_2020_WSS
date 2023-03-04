@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class LogoutController extends Controller
 {
@@ -13,9 +16,20 @@ class LogoutController extends Controller
      */
     public function index()
     {
-        return response()->json([
-                'message'=>"Logout Success"
+        if (Auth::check()){
+            $user = auth()->user();
+            $user->deleteApiToken();
+            Auth::guard('web')->logout();
+            return response()->json([
+                'message'=>"Logout Success",
             ], 200);
+        }
+        else{
+            return response()->json([
+                'message'=>'Unauthorised user '
+            ],401);
+        }
+
     }
 
     /**

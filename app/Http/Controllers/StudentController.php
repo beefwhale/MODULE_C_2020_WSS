@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Resources\MyProfileResource;
+use Illuminate\Session\TokenMismatchException;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use TheSeer\Tokenizer\TokenCollectionException;
 
 class StudentController extends Controller
 {
@@ -15,11 +19,17 @@ class StudentController extends Controller
      */
     public function index()
     {
-        //check for authorization token this is a temp line
-        $user = User::where('username','test')->first();
-        return response()-> json([
-            new MyProfileResource($user)
-        ]);
+        try{
+            $user = Auth::user();
+            return response()-> json([
+                new MyProfileResource($user)
+            ]);
+        }
+        catch(error){
+            return response()-> json([
+                "message"=>"Unauthorised User"
+            ],401);
+        }
 
     }
 

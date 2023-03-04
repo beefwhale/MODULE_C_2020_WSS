@@ -18,7 +18,7 @@ class BookingResource extends JsonResource
     public function toArray($request)
     {
         $schedule = Schedules::where('id',$this->programme_schedule_id)->first();
-        $programme = Programmes::where('id',$schedule->programme_id)->first();
+        $programme = Programmes::where('id',$schedule->programmes_id)->first();
         return[
             'id'=>$this->id,
             'programme_title'=>$programme->title,

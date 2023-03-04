@@ -5,7 +5,13 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Resources\LoginResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use mysql_xdevapi\Exception;
+use Illuminate\Support\Str;
+use Nette\Schema\ValidationException;
+use Validator;
 
 class LoginController extends Controller
 {
@@ -31,30 +37,48 @@ class LoginController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-                   'username'=>'required','string',
-                    'password'=>'required'
-            ]);
-        $user = User::where('username',$validated['username'])->first();
-        if($user == null || $validated['password'] == null){
+        $validated = Validator::make($request->all(),[
+            'username'=>'required',
+            'password'=>'required'
+        ]);
+        if ($validated->fails()){
+            return response()->json([
+                'message'=>'Invalid Login'
+            ],400);
+        }
+        if(Auth::attempt(['username'=>$request['username'],'password'=>$request['password']])){
+            $user = auth()->user();
+            $token = $user->createApiToken();
             return response()->json([
                 'success'=> true,
-                'data'=> LoginResource::collection($user)
+                'data'=> [
+                    'token'=> $token,
+                    'user'=>new LoginResource($user)
+                ]
             ],200);
         }
         else{
-            if($user && ($validated['password'] == $user->password)){
-                return response()->json([
-                    'success'=> true,
-                    'data'=> new LoginResource($user)
-                ],200);
-            }
-            else{
-                return response()->json([
-                    'message'=>'Invalid Login'
-                ],400);
-            }
+            return response()->json([
+                'message'=>'Invalid Login'
+            ],400);
         }
+        /*$user = User::where('username',$request['username'])->first();
+        if($user && Hash::check($request['password'],$user->password)){
+            //Generate Token
+            $token = $user->createApiToken();
+            return response()->json([
+                'success'=> true,
+                'data'=> [
+                    'token'=> $token,
+                    'user'=>new LoginResource($user)
+                ]
+            ],200);
+        }
+        else{
+            return response()->json([
+                'message'=>'Invalid Login'
+            ],400);
+        }*/
     }
 
     /**

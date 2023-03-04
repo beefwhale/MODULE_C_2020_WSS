@@ -9,6 +9,8 @@ use App\Models\Schedules;
 use App\Models\User;
 use GuzzleHttp\Psr7\UploadedFile;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
 {
@@ -22,7 +24,7 @@ class DatabaseSeeder extends Seeder
         \App\Models\User::factory()->create([
             'name' => "test",
             'email' => "test@test.com",
-            'password' => '123456', // password
+            'password' =>  Hash::make('123456'), // password
             'username'=> "test",
             'first_name'=> "test",
             'last_name'=> 'test',
@@ -42,7 +44,7 @@ class DatabaseSeeder extends Seeder
             'venue'=>"The Moon",
             'remarks'=>"The Moon",
             'instructor'=>"Moon",
-            'programme_id'=> 1
+            'programmes_id'=> 1
         ]);
         Schedules::factory(15)->create();
 

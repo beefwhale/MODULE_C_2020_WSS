@@ -27,7 +27,7 @@ class SchedulesFactory extends Factory
             'venue'=>$this->faker->streetName(),
             'remarks'=>$this->faker->text(),
             'instructor'=>$this->faker->name(),
-            'programme_id'=> $programme
+            'programmes_id'=> $programme
         ];
     }
 }

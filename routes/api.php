@@ -17,20 +17,21 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 // User Authentication
 Route::resource('/login',\App\Http\Controllers\LoginController::class)->only([
-    'store','index'
+    'store'
 ]);
 Route::resource('/logout',\App\Http\Controllers\LogoutController::class)->only([
     'index'
-]);
+])->middleware('auth:api');
 //Student
 Route::resource('/student/register',\App\Http\Controllers\StudentController::class)->only([
     'store'
 ]);
 Route::resource('/student/myprofile',\App\Http\Controllers\StudentController::class)->only([
     'index'
-]);
+])->middleware('auth:api');
 Route::resource('/student/update',\App\Http\Controllers\StudentController::class)->only([
     'update'
 ]);
