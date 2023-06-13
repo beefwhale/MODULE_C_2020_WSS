@@ -49,6 +49,7 @@ Route::resource('/booking',\App\Http\Controllers\BookingController::class)->only
 Route::resource('/booking/cancel/{id}',\App\Http\Controllers\CancelBookingController::class)->only([
     'store'
 ]);
+
 //Reports
 Route::get('/reports/total_sign_up/{startDate}/{endDate}',[\App\Http\Controllers\ReportController::class,
     'getTotalSignups']);
